@@ -62,15 +62,23 @@ extends Mage_Core_Controller_Varien_Router_Standard
         /* @var $cms Mage_Cms_Model_Page */
         if($cms && $cms->getId() && strlen($cms->getGroupname()) > 1)
         {
-            $redirect = Mage::getModel('cms/page')->getCollection()
+            $collection = Mage::getModel('cms/page')->getCollection()
                 ->addFieldToSelect(array('groupname', 'identifier'))
                 ->addFieldToFilter('groupname', $cms->getGroupname())
                 ->addFieldToFilter('is_active', 1)
                 ->addStoreFilter((int) Mage::app()->getStore()->getStoreId(), true)
-                ->setPageSize(1)
-                ->setOrder('store_id', 'DESC')
-                ->getFirstItem()
-            ;
+                ->setPageSize(1);
+            $collection->getSelect()->join(
+                    array('cms_store' => $collection->getTable('cms/page_store')),
+                    'main_table.page_id = cms_store.page_id',
+                    array('store_id')
+                )
+                ->where('cms_store.store_id IN (?)', array(
+                    0,
+                    (int) Mage::app()->getStore()->getStoreId()
+                ))
+                ->order(array('cms_store.store_id DESC'));
+            $redirect = $collection->getFirstItem();
             /* @var $redirect Mage_Cms_Model_Page */
             if ($redirect && $redirect->getId())
             {
