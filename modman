@@ -1,0 +1,4 @@
+src/app/code/community/MageProfis/Cms               app/code/community/MageProfis/Cms
+src/app/etc/modules/MageProfis_Cms.xml              app/etc/modules/MageProfis_Cms.xml
+src/app/locale/en_US/MageProfis_Cms.csv             app/locale/en_US/MageProfis_Cms.csv
+src/app/locale/de_DE/MageProfis_Cms.csv             app/locale/de_DE/MageProfis_Cms.csv
